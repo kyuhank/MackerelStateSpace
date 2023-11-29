@@ -1,3 +1,13 @@
+
+// ———————————————————————————————
+// State-space length-based age-structured model by Kyuhan Kim
+// Copyright © 2023 Kyuhan Kim. All rights reserved.
+// Contact: kh2064@gmail.com for questions
+// MIT License: https://opensource.org/licenses/MIT
+// ———————————————————————————————
+
+
+
 template <class Type>
 Type bounded_invlogit(Type y, Type ubound, Type lbound){ 
   return (ubound-lbound)/(Type(1) + exp(-y))+lbound;

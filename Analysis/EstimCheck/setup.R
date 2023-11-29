@@ -1,7 +1,16 @@
 
+# ———————————————————————————————
+# State-space length-based age-structured model by Kyuhan Kim
+# Copyright © 2023 Kyuhan Kim. All rights reserved.
+# Contact: kh2064@gmail.com for questions
+# MIT License: https://opensource.org/licenses/MIT
+# ———————————————————————————————
+
+
+
 cat('\n\n Setup begins \n\n')  
 
-LocalRun=F
+LocalRun=T
 
 #############
 ## library ##
@@ -37,7 +46,7 @@ compile("../../Model/Main/main.cpp"); dyn.load(dynlib("../../Model/Main/main"))
 ##################################
 
 ##env variables ##
-nsimSelfBoth <- as.integer(Sys.getenv("nsimSelfBoth", 5))
+nsimSelfBoth <- as.integer(Sys.getenv("nsimSelfBoth", 1000))
 
 SelfTestBoth <- as.integer(Sys.getenv("SelfTestBoth", 1))
 ProfLike <- as.integer(Sys.getenv("ProfLike", 0))

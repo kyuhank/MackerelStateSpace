@@ -1,5 +1,0 @@
-docker: dragonflyscience/sharknado:2023-06-18
-memory: 80
-cpus: 32
-allows: ["Mack-LBASM-ModelFitting", "Mack-LBASM-ms", "Mack-LBASM-EstimCheck", "Mack-LBASM-Diagnostics", "Mack-LBASM-output"]
-#requires: ["Mack-LBASM-ModelFitting:6670"]

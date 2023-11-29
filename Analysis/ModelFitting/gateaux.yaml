@@ -1,4 +1,0 @@
-docker: dragonflyscience/sharknado:2023-06-18
-memory: 32
-cpus: 32
-allows: ["Mack-LBASM-ms", "Mack-LBASM-EstimCheck", "Mack-LBASM-Diagnostics"]
