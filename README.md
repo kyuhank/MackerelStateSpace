@@ -17,8 +17,7 @@ In a state-space framework, temporal variations in fishery-dependent processes, 
 
 3. the order is as follows:
 
-   i. `Modelfitting`: `makefile`
-   ii. `Diagnostics`: `makefile`
-   iii. `EstimCheck`: `makefile`
-
+   i. `Modelfitting`
+   ii. `Diagnostics`
+   iii. `EstimCheck`
 

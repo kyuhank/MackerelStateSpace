@@ -12,7 +12,7 @@ cat('\n\n Setup begins \n\n')
 
 LocalRun=T
 
-#############
+############# 
 ## library ##
 #############
 
@@ -24,7 +24,7 @@ require(extraDistr)
 require(parallel)
 
 ## compile the TMB model ##
-compile("../../Model/Main/main.cpp"); dyn.load(dynlib("../../Model/Main/main"))
+compile("../../src/Main/main.cpp"); dyn.load(dynlib("../../src/Main/main"))
 
 ###############################
 ### Load data and functions ###

@@ -39,7 +39,7 @@ source("../../Data_and_functions/Data_and_Parameters.R")
 
 
 ## compile the TMB model ##
-compile("../../Model/Main/main.cpp"); dyn.load(dynlib("../../Model/Main/main"))
+compile("../../src/Main/main.cpp"); dyn.load(dynlib("../../src/Main/main"))
 
 ##################################
 ## read environmental variables ##

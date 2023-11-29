@@ -39,7 +39,7 @@ source("../../Data_and_functions/Data_and_Parameters.R")
 
 
 ## compile the TMB model ##
-compile("../../Model/Main/main.cpp"); dyn.load(dynlib("../../Model/Main/main"))
+compile("../../src/Main/main.cpp"); dyn.load(dynlib("../../src/Main/main"))
 
 ##################################
 ## read environmental variables ##
@@ -54,13 +54,6 @@ ProfLike <- as.integer(Sys.getenv("ProfLike", 0))
 ## number of cores
 nCores=detectCores()
 print(paste0("Cores: ", nCores))
-
-## select models for further evaluation
-#SelectModels_after_diag=c(4,5,6)
-#SelectedModels_after_diag=SelectedModels[SelectModels_after_diag,]
-
-## select models
-#ModelsEstimResults=ModelsEstimResults[,SelectModels_after_diag]
 
 cat('\n\n Setup finished \n\n')  
 
