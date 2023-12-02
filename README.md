@@ -1,6 +1,6 @@
 This repository contains the code and data for the following paper:
 
-# **Enhancing data-limited assessments: Optimal utilization of fishery-dependent data through random effects &mdash; A case study on Korea chub mackerel (_Scomber japonicus_)**
+## **Enhancing data-limited assessments: Optimal utilization of fishery-dependent data through random effects &mdash; A case study on Korea chub mackerel (_Scomber japonicus_)**
 
 *Kyuhan Kim, Nokuthaba Sibanda, Richard Arnold, and Teresa A'mar*
 
