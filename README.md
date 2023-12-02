@@ -49,3 +49,5 @@ management were discussed.
    ii. `Diagnostics`
    iii. `EstimCheck`
 
+*Please do not redistribute the code without the author's permission*
+
