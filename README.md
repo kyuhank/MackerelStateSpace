@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/724971318.svg)](https://zenodo.org/doi/10.5281/zenodo.10258210)
+
 This repository contains the code and data for the following paper:
 
 ## **Enhancing data-limited assessments: Optimal utilization of fishery-dependent data through random effects &mdash; A case study on Korea chub mackerel (_Scomber japonicus_)**
