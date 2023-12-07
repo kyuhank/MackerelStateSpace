@@ -12,15 +12,14 @@ In a state-space framework, temporal variations in fishery-dependent processes c
 
 ## How to run the code
 
-1. go to the folder `Analysis`
+1. Navigate to the `Analysis` folder.
+2. Execute the scripts by entering `makefile` in the terminal, ensuring that the working directory is set to the appropriate subfolders in this order: `Modelfitting`, `Diagnostics`, and `EstimCheck`. Before running the Modelfitting subfolder, modify the `setup.R` script by changing `penalty=0` to `penalty=1` for the `ModelEstim.R` script. `penalty=1` enables the use of a non-degenerate estimator.
 
-2. run the scripts by typing `makefile` in the terminal after setting the working directory to the subfolders, `Modelfitting`, `Diagnostics`, and `EstimCheck`.
+The execution order should be:
+i. `Modelfitting`
+ii. `Diagnostics`
+iii. `EstimCheck`
 
-3. the order is as follows:
-
-   i. `Modelfitting`
-   ii. `Diagnostics`
-   iii. `EstimCheck`
-
-*Please do not redistribute the code without the author's permission*
-
+## Important things to note when running the code
+- Some datasets (i.e., CPUE and length composition) were digitized from published figures in previous studies (Kim et., 2018, Jung 2019, Gim 2019) using WebPlotDigitizer (Rohatgi, 2022).
+- The data for the length composition were rounded to integers and the CPUE (Catch Per Unit Effort) to two decimal places in the actual analysis. However, we presented the data in its raw form for transparency regarding digitization.
