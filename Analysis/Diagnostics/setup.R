@@ -6,8 +6,6 @@
 # MIT License: https://opensource.org/licenses/MIT
 # ———————————————————————————————
 
-
-
 cat('\n\n Setup begins \n\n')  
 
 LocalRun=T
@@ -51,7 +49,7 @@ nsimJitter <- as.integer(Sys.getenv("nsimJitter", 100))
 npeels <- as.integer(Sys.getenv("npeels", 8))
 
 RetroTest <- as.integer(Sys.getenv("RetroTest", 1))
-JitAnalysis <- as.integer(Sys.getenv("JitAnalysis", 1))
+JitAnalysis <- as.integer(Sys.getenv("JitAnalysis", 0))
 ResidTest <- as.integer(Sys.getenv("ResidTest", 1))
 SelfTestObs <- as.integer(Sys.getenv("SelfTestObs", 1))
  

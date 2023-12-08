@@ -1,6 +1,7 @@
 [![DOI](https://zenodo.org/badge/724971318.svg)](https://zenodo.org/doi/10.5281/zenodo.10258210)
 
-This repository contains the code and data for the following paper:
+
+This repository contains the code and data for the following paper, which ensures reproducibility and transparency of the research:
 
 ## **Enhancing data-limited assessments: Optimal utilization of fishery-dependent data through random effects &mdash; A case study on Korea chub mackerel (_Scomber japonicus_)**
 
@@ -13,7 +14,7 @@ In a state-space framework, temporal variations in fishery-dependent processes c
 ## How to run the code
 
 1. Navigate to the `Analysis` folder.
-2. Execute the scripts by entering `makefile` in the terminal, ensuring that the working directory is set to the appropriate subfolders in this order: `Modelfitting`, `Diagnostics`, and `EstimCheck`. Before running the `Modelfitting` subfolder, modify the `setup.R` script by changing `penalty=0` to `penalty=1` for the `ModelEstim.R` script. `penalty=1` enables the use of a non-degenerate estimator.
+2. Execute the scripts by entering `makefile` in the terminal, ensuring that the working directory is set to the appropriate subfolders in this order: `Modelfitting`, `Diagnostics`, and `EstimCheck`.
 
 The execution order should be:
   i. `Modelfitting`
@@ -21,12 +22,16 @@ The execution order should be:
   iii. `EstimCheck`
 
 ## Important things to note when running the code
-- Certain datasets, such as CPUE (Catch Per Unit Effort) and length composition data, were digitized from figures published in earlier studies (Kim et al., 2018; Jung, 2019; Gim, 2019) using WebPlotDigitizer ([Rohatgi, 2022](https://automeris.io/WebPlotDigitizer/)).
+
+- Certain datasets, such as CPUE (Catch Per Unit Effort) and length composition data, were digitized from figures published in earlier studies openly accessible online (Kim et al., 2018; Jung, 2019; Gim, 2019) using WebPlotDigitizer ([Rohatgi, 2022](https://automeris.io/WebPlotDigitizer/)). The accuracy of the digitization was verified by comparing the digitized data with the original figures. 
+
 - The data for the length composition were rounded to integers and the CPUE (Catch Per Unit Effort) to two decimal places in the actual analysis. However, we presented the data in its raw form for transparency regarding digitization.
+
+- Results from simulation runs, such as those from parametric bootstrap, are not stored in this repository due to their substantial file size. However, the repository does include the code necessary to conduct these simulations. Please note that running these simulations on a local machine without parallelization may be time-consuming. Should you require the simulation results, they can be requested directly from the author of this repository.
 
 ## References
 
-Figures used for digitization were sourced from the following references:
+Figures used for digitization were sourced from the following publications:
 
 - Kim, K., Hyun, S.-Y., & Seo, Y. I. (2018). (Korean) Inference of age compositions in a sample of fish from fish length data. *The Korean Journal of Fisheries and Aquatic Sciences*, 51(1), 79–90. [DOI](https://doi.org/10.5657/KFAS.2018.0079)
 
