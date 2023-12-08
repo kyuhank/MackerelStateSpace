@@ -6,8 +6,6 @@
 # MIT License: https://opensource.org/licenses/MIT
 # ———————————————————————————————
 
-
-
 cat('\n\n Setup begins \n\n')  
 
 LocalRun=T
@@ -48,21 +46,21 @@ print(paste0("Cores: ", nCores))
 
 ## Constant selex models
 GridConstSel=expand.grid("qForm"=c(0,1,3),                ## 0: constant q;  1: linear increase;  3: random walk 
-                         "SelRand"=c(0),
-                         "Penalty"=c(0),
-                         "FixRho"=c(0),
-                         "FixRhoR"=c(0))
+                         "SelRand"=c(0),                  ## 0: constant selex;  1: random selex
+                         "Penalty"=c(1),                  ## 0: no penalty;  1: penalty
+                         "FixRho"=c(0),                   ## autocorrelation in selex
+                         "FixRhoR"=c(0))                  ## autocorrelation in recruitment (optional)
 
 ## Random selex models
 GridRandomSel=expand.grid("qForm"=c(0,1,3),               ## 0: constant q;  1: linear increase;  3: random walk 
-                          "SelRand"=c(1),
-                          "Penalty"=c(0),
-                          "FixRho"=c(0, 0.3, 0.6, 0.9),
-                          "FixRhoR"=c(0))
+                          "SelRand"=c(1),                 ## 0: constant selex;  1: random selex
+                          "Penalty"=c(1),                 ## 0: no penalty;  1: penalty
+                          "FixRho"=c(0, 0.3, 0.6, 0.9),   ## autocorrelation in selex
+                          "FixRhoR"=c(0))                 ## autocorrelation in recruitment (optional)
 
-ModelConFig=rbind(GridConstSel, GridRandomSel)
+ModelConFig=rbind(GridConstSel, GridRandomSel)            ## all models
 
-nGridJobs=nrow(ModelConFig)
+nGridJobs=nrow(ModelConFig)                               ## number of models
 
 ################
 ## input objs ##

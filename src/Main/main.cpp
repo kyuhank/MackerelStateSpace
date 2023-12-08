@@ -30,7 +30,7 @@ Type objective_function<Type>::operator() () {
   //@@ Data section @@
   //@@@@@@@@@@@@@@@@@@
   
-  DATA_VECTOR(bins);                 // midpoints
+  DATA_VECTOR(bins);              // midpoints
   DATA_MATRIX(Lengfreq_t);        // Length frequency data
   DATA_VECTOR(Yt);                // Yield
   DATA_VECTOR(It);                // realtive abundance index or effort
@@ -44,7 +44,7 @@ Type objective_function<Type>::operator() () {
   DATA_SCALAR(SpawningTimeElapse); // fraction of time elapsed for sexual maturation
   DATA_SCALAR(FemaleProp);
   
-  DATA_SCALAR(steepness);
+  DATA_SCALAR(steepness);          // steepness (optional)
   
   DATA_IVECTOR(LengthFreqYears);
   DATA_IVECTOR(cpueYears);
@@ -505,9 +505,9 @@ Type objective_function<Type>::operator() () {
     vector<Type> MiddleBt_sim=OutPut_sim.block(A+nbins+5+A,0,1,nyears).transpose();
     
     
-    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    //@@ simulate an observed data @@
-    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //@@ simulate observed data @@
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     
     for(int t=0; t<ncpue; t++) {
       ItResiduals_sim(t)=rnorm(Type(0), sigI);
