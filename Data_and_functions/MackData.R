@@ -1,22 +1,10 @@
-require(sn)
-require(rootSolve)
-
-
-invlogit <-function(y, lb=0, ub=1) {
-  (ub-lb)/(1 + exp(-y))+lb
-}
-
-logit <-function(x) {
-  log(x/(1-x)) 
-}
-
-SigmaFromCV <- function (CV) {
-  sqrt(log(CV^2+1))
-  }
 
 #########################################
 ################ catch data #############
 #########################################
+
+## Annual catch data from 1950 to 2021 of chub mackerel in Korean waters (in MT)
+## This data are also openly available from Statistics Korea and the FishstatJ database, which is provided by the Food and Agriculture Organization of the United Nations (FAO).
 
 catch_data=c(15000, 19000, 19800, 21000, 26600, 18500, 13900, 12800, 5800, 1600, 2100, 1800, 4100, 5400, 2400, 7300, 
              2000, 2800, 10500, 42100, 38256,	60599,	78969,	74150,	80649,	70123,	107382,	113051,	99519,	120283,	62690,	108082,	99447,	122883,	101714,	68479,
@@ -30,7 +18,10 @@ names(catch_data)<-1950:2021
 ################ Length data ############
 #########################################
 
-## digitised from figures of previous papers, so the values have many decimal places
+## Length frequency data were collected from the large purse seine fishery from 2000 to 2017 by the National Institute of Fisheries Science (NIFS).
+## bin width is 1 cm
+## digitised from figures of previous papers (Kim et al. 2018, Jung 2019, Gim 2019), so the values have many decimal places
+## in fork length (FL) cm
 
 LengData=structure(c(0.00910681816382874, 0.00551797671697145, 0.0127720076618798, 
                      0.00476669401904835, 0.0128131746961556, 50.9958880460653, 57.0021669538617, 
@@ -239,12 +230,16 @@ LengData=structure(c(0.00910681816382874, 0.00551797671697145, 0.012772007661879
                                                                                                                   "47.5", "48.5", "49.5", "50.5", "51.5"), c("2000", "2001", "2002", 
                                                                                                                                                              "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", 
                                                                                                                                                              "2011", "2012", "2013", "2014", "2015", "2016", "2017")))
+## round the values to 0 decimal places as the data are counts
+LengData=round(LengData,0)
 
 #########################################
 ################ CPUE data ##############
 #########################################
 
-## digitised from figures of previous papers, so the values have many decimal places
+## CPUE data were collected from the large purse seine fishery from 1976 to 2019 by the National Institute of Fisheries Science (NIFS).
+## digitised from figures of previous papers (Kim et al. 2018, Jung 2019, Gim 2019), so the values have many decimal places
+## CPUE unit is kg per haul
 
 It_data=c(27.2993135803913, 19.2884005356802, 16.4938989223193, 17.992743867666, 
           10.3880816720222, 13.0999693043573, 10.0005393429222, 11.409321081935, 
@@ -258,12 +253,15 @@ It_data=c(27.2993135803913, 19.2884005356802, 16.4938989223193, 17.992743867666,
           25.1099160193169, 19.3225535840596, 21.5594859290561, 21.0793562339259, 
           20.1555442077296, 16.4656229589435, 29.6865335365337, 26.3773594317103)
 
+## round to 2 decimal places for computational efficiency in our analysis
+It_data=round(It_data,2)
+
 names(It_data) <-1976:2019
 
 
 
 ############################################################################################################################################
-############################################################################################################################################
+ 
 ############################################################################################################################################
 
 ## number of age groups (0 to 5)
@@ -272,11 +270,11 @@ A=6
 ## number of years
 nyears=length(catch_data)
 
-## length-weight relationship
-alpha=0.003*1e-6
+## length-weight relationship from Gim and Hyun 2019
+alpha=0.003*1e-6 #(in MT)
 beta=3.425
 
-## maturity
+## maturity from Kim et al. 2020
 mat1=20.11
 mat2=0.70
 
@@ -292,7 +290,7 @@ ncpue=44
 nLengthFreq=18
 
 
-## mean lengths
+## mean lengths from Jung et al. 2021
 MeanLengths=c(23.9, 27.8, 30.6, 34.8, 37.2, 40.1, 42.7)
 
 ## Maturity
@@ -306,10 +304,16 @@ LengthWeight=alpha*MeanLengths[1:A]^beta
 #############################################################################################################################################################################################################
 #############################################################################################################################################################################################################
 
-## Length Distribution ##
+## Estimating length-at-age probability distributions in catch using skew normal distributions
+
+## packages for estimating the parameters of the skew normal distribution
+require(sn)
+require(rootSolve)
 
 binwidth=bins[2]-bins[1]
 
+
+## model for multiroot function
 model <- function(x, parms) {
   omega = x[1]
   alpha = x[2]
@@ -322,6 +326,7 @@ model <- function(x, parms) {
 }
 
 
+## using multiroot function from rootSolve package to estimate the parameters of the skew normal distribution
 AgeSkewNorm <-function(x, parms) {
   
   sol = multiroot(model, x, parms=parms)
@@ -341,7 +346,7 @@ AgeSkewNorm <-function(x, parms) {
 
 
 
-
+## these minimum, mean, and maximum values of length-at-age are openly available in Jung et al. 2021
 Age_Mean_Quantiles=list("age0"=c(23.9, 19.1, 29),
                         "age1"=c(27.8, 23.1, 33),
                         "age2"=c(30.6, 26.1, 36),
@@ -372,6 +377,7 @@ nbins=length(bins)
 
 AgeLengDist=matrix(0, nrow=A, ncol=nbins)
 
+## the length-at-age probability distributions in catch using skew normal distributions
 for (a in 1:A) {
   for (i in 1:nbins) {
     if(i==1) {
@@ -382,13 +388,5 @@ for (a in 1:A) {
       AgeLengDist[a,i]=1-psn(bins[i]-binwidth/2, xi=DistPars[[a]]["xi"], omega=DistPars[[a]]["omega"], alpha=DistPars[[a]]["alpha"])
     }
   }
-}
-
-
-
-
-
-invlogit <-function(y) {
-  1/(1 + exp(-y))
 }
 

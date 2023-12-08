@@ -557,3 +557,24 @@ MackBoot=function(FittedObj,
               "fobjs_good"=fobjs_good))
   
 }
+
+
+
+
+#####################
+## helper functions##
+#####################
+
+
+invlogit <-function(y, lb=0, ub=1) {
+  (ub-lb)/(1 + exp(-y))+lb
+}
+
+logit <-function(x) {
+  log(x/(1-x)) 
+}
+
+SigmaFromCV <- function (CV) {
+  sqrt(log(CV^2+1))
+}
+

@@ -30,9 +30,9 @@ compile("../../src/Main/main.cpp"); dyn.load(dynlib("../../src/Main/main"))
 ### Load data and functions ###
 ###############################
 
-source("../../Data_and_functions/mack_source_data.R")
+source("../../Data_and_functions/MackData.R")
 source("../../Data_and_functions/MackFunctions.R")
-source("../../Data_and_functions/Data_and_Parameters.R")
+source("../../Data_and_functions/TMBInputObjs.R")
 
 ##################################
 ## read environmental variables ##

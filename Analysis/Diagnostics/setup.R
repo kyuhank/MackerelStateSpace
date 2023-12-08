@@ -33,9 +33,9 @@ if(LocalRun==T) {
   load("/input/Mack-LBASM-ModelFitting/ModelFitted.RData")
 }
 
-source("../../Data_and_functions/mack_source_data.R")
+source("../../Data_and_functions/MackData.R")
 source("../../Data_and_functions/MackFunctions.R")
-source("../../Data_and_functions/Data_and_Parameters.R")
+source("../../Data_and_functions/TMBInputObjs.R")
 
 
 ## compile the TMB model ##

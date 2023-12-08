@@ -1,5 +1,7 @@
+##############################
+## Initial parameter values ##
+##############################
 
-## Parameters ##
 params=list("logR0"=16,
             "logita05"=0,
             "logita95"=0,
@@ -19,11 +21,9 @@ params=list("logR0"=16,
             "FResiduals"=rnorm(nyears, 0, 0.0),
             "CatchableResiduals"=rnorm(ncpue-1, 0, 0.0))
 
-
-##########################################
-############# make input obj #############
-##########################################
-
+#################################
+## make input data obj for TMB ##
+#################################
 
 MakeInputObj=function(steepness=1,
                       qForm=1,
@@ -35,7 +35,6 @@ MakeInputObj=function(steepness=1,
                       REML=0
 ) {
   
-  ## Data ##
   data=list("Penalty"=Penalty,
             "bins"=bins,
             "Lengfreq_t"=LengData,
