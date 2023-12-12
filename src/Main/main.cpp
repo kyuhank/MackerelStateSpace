@@ -433,11 +433,9 @@ Type objective_function<Type>::operator() () {
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     if(SelRand==1) {
-      a05Residuals_sim(0)=rnorm(Type(0), siga05);
-      for(int t=1; t<nyears; t++) {
-      a05Residuals_sim(t)=Rho*a05Residuals_sim(t-1)+rnorm(Type(0), siga05);
-      }
+      SCALE(AR1(Rho), Sigma_siga05).simulate(a05Residuals_sim);
     }
+    
     
     for(int t=0; t<nyears; t++) {
       a05t_sim(t)=bounded_invlogit(logita05+a05Residuals_sim(t), Up_a05, Low_a05);
