@@ -559,6 +559,199 @@ MackBoot=function(FittedObj,
 }
 
 
+################
+## Cross test ##
+################
+
+MackCross=function(OMobj,
+                   EMobj,
+                   SimProcess=1,
+                   qPenalty=1,
+                   nsims=100,
+                   seed=NULL,
+                   ...) {
+  
+  set.seed(seed)
+  
+  
+  SimulReport=sdreport(EMobj, bias.correct=T)
+  
+  
+  if(SimProcess==1){
+    OMobj$env$data$ObsOnlySim=0
+  } else {
+    OMobj$env$data$ObsOnlySim=1
+  }
+  
+  
+  FixedParNames_transformed=rownames(summary(SimulReport, "fixed"))
+  FixedParNames=setdiff(rownames(summary(SimulReport, "report")), FixedParNames_transformed)
+  
+  
+  ## extract data and para input
+  Data=EMobj$env$data
+  Params=EMobj$env$parameters
+  
+  
+  ## Random component ##
+  RandomComponent=c(  ifelse(Data$qForm==2 | Data$qForm==3, "CatchableResiduals", NA),
+                      ifelse(Data$SelRand==1, "SelResiduals", NA),
+                      "RecruitResiduals",
+                      "FResiduals")
+  
+  RandomComponent=RandomComponent[!is.na(RandomComponent)]
+  
+  
+  nyears=OMobj$env$data$nyearsAll
+  ncpue=OMobj$env$data$ncpueAll
+  nLengthFreq=OMobj$env$data$nLengthFreqAll
+  nbins=length(OMobj$env$data$bins)
+  LengSamSize=colSums(OMobj$env$data$Lengfreq_t)
+  
+  Sim_Leng=matrix(NA, nrow=nbins, ncol=nLengthFreq)
+  
+  AIC=c()
+  objectives=c()
+  
+  simIter=0
+  conv_num=0
+  
+  
+  ## containers ##
+  Sim_SSBt=matrix(NA, nrow=nsims, ncol=nyears)
+  Sim_Bt=matrix(NA, nrow=nsims, ncol=nyears+1)
+  Sim_Ft=matrix(NA, nrow=nsims, ncol=nyears)
+  Sim_qt=matrix(NA, nrow=nsims, ncol=ncpue)
+  
+  Estim_SSBt=matrix(NA, nrow=nsims, ncol=nyears)
+  Estim_Bt=matrix(NA, nrow=nsims, ncol=nyears+1)
+  Estim_Ft=matrix(NA, nrow=nsims, ncol=nyears)
+  Estim_qt=matrix(NA, nrow=nsims, ncol=ncpue)
+  
+  Estim_Pars=matrix(NA, nrow=nsims, ncol=length(FixedParNames))
+  
+  RelDiff_SSBt=matrix(NA, nrow=nsims, ncol=nyears)
+  RelDiff_Bt=matrix(NA, nrow=nsims, ncol=nyears+1)
+  RelDiff_Ft=matrix(NA, nrow=nsims, ncol=nyears)
+  RelDiff_qt=matrix(NA, nrow=nsims, ncol=ncpue)
+  
+  
+  
+  colnames(Estim_SSBt)<-paste("SSB", 1:(nyears), sep='')
+  colnames(Estim_Bt)<-paste("B", 1:(nyears+1), sep='')
+  colnames(Estim_Ft)<-paste("F", 1:nyears, sep='')
+  colnames(Estim_qt)<-paste("q", 1:ncpue, sep='')
+  
+  
+  colnames(RelDiff_SSBt) <- paste("SSB", 1:(nyears), sep='')
+  colnames(RelDiff_Bt) <- paste("B", 1:(nyears+1), sep='')
+  colnames(RelDiff_Ft) <- paste("F", 1:nyears, sep='')
+  colnames(RelDiff_qt) <- paste("q", 1:ncpue, sep='')
+  
+  colnames(Estim_Pars)<-FixedParNames
+  
+  
+  ## self-test loop
+  for (s in 1:nsims) {
+    
+    simIter=simIter+1
+    
+    print(paste("iter-",simIter, sep=''))
+    
+    ## data simulation given the estimates of the fixed-effect parameters
+    Simul=OMobj$simulate(OMobj$env$last.par.best)
+    
+    for (t in 1:nLengthFreq) { 
+      Sim_Leng[,t]=extraDistr::rdirmnom(1, LengSamSize[t],  Simul$dirmnomAlpha[,t])
+    }
+    
+    
+    ## change data object
+    SimData=Data
+    SimData$Lengfreq_t=Sim_Leng
+    SimData$It=Simul$It_sim
+    SimData$Yt=Simul$Yt_sim
+    
+    Sim_Bt[s,]=Simul$Bt_sim
+    Sim_SSBt[s,]=Simul$SSBt_sim
+    Sim_Ft[s,]=Simul$Ft_sim
+    Sim_qt[s,]=Simul$qt_sim
+    
+    if(qPenalty==1){
+      SimData$qPenalty=1
+    } else {
+      SimData$qPenalty=0
+    }
+    
+    ## tmb obj
+    fboot <- MakeADFun(SimData, 
+                       Params, 
+                       DLL="main",
+                       random=RandomComponent,
+                       ...)
+    
+    ## fit the FittedObj
+    fitboot=try(nlminb(fboot$par, fboot$fn, fboot$gr, control = list("iter.max"=10^3)))
+    
+    if ( !is.character(fitboot) ) {
+      
+      if (fitboot$convergence==0 & max(abs(fboot$gr())) <0.1) {
+        
+        Estim_Pars[s,]=unlist(fboot$report()[FixedParNames])
+        
+        Estim_Bt[s,]=fboot$report()$Bt
+        Estim_SSBt[s,]=fboot$report()$SSBt
+        Estim_Ft[s,]=fboot$report()$Ft
+        Estim_qt[s,]=fboot$report()$qt
+        
+        ## RellDiff ##
+        RelDiff_Bt[s,]=Estim_Bt[s,]/Sim_Bt[s,]-1
+        RelDiff_SSBt[s,]=Estim_SSBt[s,]/Sim_SSBt[s,]-1
+        RelDiff_Ft[s,]=Estim_Ft[s,]/Sim_Ft[s,]-1
+        RelDiff_qt[s,]=Estim_qt[s,]/Sim_qt[s,]-1
+        
+        
+        objectives[s]=fitboot$objective
+        AIC[s]=-2*(-objectives[s])+2*length(fboot$par)
+        
+        conv_num=conv_num+1  
+        
+        print(paste("conv_rate: ", conv_num/s, sep=""))
+        
+      }
+    } else {
+      
+      objectives[s]=NA
+      AIC[s]=NA
+    }
+    
+    
+    TMB::FreeADFun(fboot)
+    
+  }
+  
+  return(list("AIC"=AIC,
+              "Estim_Pars"=Estim_Pars,
+              "Estim_SSBt"=Estim_SSBt,
+              "Estim_Bt"=Estim_Bt,
+              "Estim_Ft"=Estim_Ft,
+              "Estim_qt"=Estim_qt,
+              "Sim_Bt"=Sim_Bt,
+              "Sim_SSBt"=Sim_SSBt,
+              "Sim_qt"=Sim_qt,
+              "Sim_Ft"=Sim_Ft,
+              "RelDiff_Bt"=RelDiff_Bt,
+              "RelDiff_SSBt"=RelDiff_SSBt,
+              "RelDiff_Ft"=RelDiff_Ft,
+              "RelDiff_qt"=RelDiff_qt,
+              "conv_num"=conv_num,
+              "objectives"=objectives,
+              "TrueBt"=OMobj$report()$Bt,
+              "TrueSSBt"=OMobj$report()$SSBt,
+              "TrueFt"=OMobj$report()$Ft,
+              "Trueqt"=OMobj$report()$qt))
+}
+
 
 
 #####################

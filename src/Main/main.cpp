@@ -85,6 +85,8 @@ Type objective_function<Type>::operator() () {
   DATA_SCALAR(FixRho);
   DATA_SCALAR(FixRhoR);
   
+  DATA_INTEGER(qPenalty);
+  
   //@@@@@@@@@@@@@@@@@@@@@@@
   //@@ Parameter section @@
   //@@@@@@@@@@@@@@@@@@@@@@@
@@ -368,7 +370,7 @@ Type objective_function<Type>::operator() () {
     nll-=dgamma(sigI, Type(2), Type(1/1e-10), true);
     nll-=dgamma(sigY, Type(2), Type(1/1e-10), true);
     
-    if (qForm==2 | qForm==3 ) {
+    if (qForm==2 | qForm==3 && qPenalty==1) {
       nll-=dgamma(sigq, Type(2), Type(1/1e-10), true);
     }
     

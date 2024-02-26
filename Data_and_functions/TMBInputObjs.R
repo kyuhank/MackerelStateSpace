@@ -71,6 +71,7 @@ MakeInputObj=function(steepness=1,
             "FixRho"=FixRho,
             "FixRhoR"=FixRhoR,
             "REML"=REML,
+            "qPenalty"=1,
             "Natural_M"=0.53)  # based on previous reports by NPFC
   
   return(data)
