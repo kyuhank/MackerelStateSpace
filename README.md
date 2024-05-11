@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10362006.svg)](https://doi.org/10.5281/zenodo.10362006)
+[![DOI](https://zenodo.org/badge/724971318.svg)](https://zenodo.org/doi/10.5281/zenodo.10258210)
 
 This repository contains the code and data for the following paper, which ensures reproducibility and transparency of the research:
 
